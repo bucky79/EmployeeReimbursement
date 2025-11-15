@@ -1,0 +1,73 @@
+<div id='menubar'>
+<ul>
+    <li><a href='/logout'>Logout</a></li>
+<ul>
+</div>
+<div id="container">
+    <h1>Reimbursement Form</h1>
+    <div class="login-form">
+        <%= form_with url: "/add_reimbursement", method: :post, scope: false do |f| %>
+        <div class="reimbu-field">
+            <%= f.label :type %>
+            <%= f.select :type, ['Food', 'Travel', 'Others'], selected: params[:type]%>
+        </div>
+
+        <div class="reimbu-field reimbu-amount">
+            <%= f.label :amount %>
+            <%= f.text_field :amount %>
+            <div class='currency-name-div'>
+              <span class="currency-name">INR</span>
+            </div>
+        </div>
+
+        <div class="reimbu-actions">
+            <%= f.submit "Submit" %>
+        </div>
+        <% end %>
+    </div>
+
+    <div class="login-form" id="reimbursement-list">
+    <div id='total-submitted-div'>
+      <span id='total-submitted'>Total Submitted:</span>
+      <span id='total-submitted-amount'><%=retain_submitted_amount('Pending')%></span>
+    </div>
+    <div id='total-approved-div'>
+      <span id='total-approved'>Total Approved:</span>
+      <span id='total-approved-amount'><%=retain_submitted_amount('Approved')%></span>
+    </div>
+        <table class="reimbursement-table">
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date of Submission</th>
+                <th>Status</th>
+            </tr>
+            <% @bills&.each do |bill| %>
+            <tr>
+                <td><%= bill.item_type %></td>
+                <td><%= bill.amount %></td>
+                <td><%= bill.created_at.strftime("%d-%m-%Y") %></td>
+                <td><%= bill.status %></td>
+            </tr>
+            <% end %>
+        </table>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    $('#amount').on('keypress', function(e) {
+        var charCode = e.which;
+        
+        // Allow numbers (48-57) and decimal point (46)
+        if ((charCode < 48 || charCode > 57) && charCode !== 46) {
+            e.preventDefault();
+        }
+        
+        // Allow only one decimal point
+        if (charCode === 46 && $(this).val().indexOf('.') !== -1) {
+            e.preventDefault();
+        }
+    });
+});
+</script>

@@ -1,0 +1,43 @@
+<div id='menubar'>
+<ul>
+    <li><a href='/users'>Users</a></li>
+    <li><a href='/dashboard'>Reimbursements</a></li>
+    <li><a href='/logout'>Logout</a></li>
+<ul>
+</div>
+    <div class="login-form" id="reimbursement-list">
+        <div id='total-submitted-div'>
+            <span id='total-submitted'>Total Submitted:</span>
+            <span id='total-submitted-amount'><%=retain_submitted_amount('Pending')%></span>
+        </div>
+        <div id='total-approved-div'>
+            <span id='total-approved'>Total Approved:</span>
+            <span id='total-approved-amount'><%=retain_submitted_amount('Approved')%></span>
+        </div>
+        <table class="reimbursement-table">
+            <tr>
+                <th>Type</th>
+                <th>Amount</th>
+                <th>Date of Submission</th>
+                <th>Submitted By</th>
+                <th>Department</th>
+                <th>Status</th>
+            </tr>
+            <% @bills&.each do |bill| %>
+            <tr>
+                <td><%= bill.item_type %></td>
+                <td><%= bill.amount %></td>
+                <td><%= bill.created_at.strftime("%d-%m-%Y") %></td>
+                <td><%= "#{bill.user.employee.first_name} #{bill.user.employee.last_name}" %></td>
+                <td><%= "#{bill.user.employee.department.department_name}" %></td>
+                <td>
+                  <%= bill.status %>
+                  <div id='approve-reject-conta'>
+                    <%=status_retainer(bill)%>
+                  </div>
+                </td>
+            </tr>
+            <% end %>
+        </table>
+    </div>
+</div>

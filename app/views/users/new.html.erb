@@ -1,0 +1,106 @@
+<div id='menubar'>
+<ul>
+    <li><a href='/users'>Users</a></li>
+    <li><a href>Reimbursements</a></li>
+    <li><a href='/logout'>Logout</a></li>
+<ul>
+</div>
+
+<div id="container">
+    <h1>New User Form</h1>
+    <div class="login-form user_form">
+        <%= form_with url: users_path, method: :post, scope: false do |f| %>
+        <div class="user-field">
+            <%= f.label :First_Name %>
+            <%= f.text_field :first_name %>
+        </div>
+
+        <div class="user-field">
+            <%= f.label :Last_Name %>
+            <%= f.text_field :last_name%>
+        </div>
+
+        <div class="user-field">
+            <%= f.label :email %>
+            <%= f.text_field :email%>
+        </div>
+
+        <div class="user-field user-field-second">
+            <%= f.label :Designation %>
+            <%= f.text_field :designation%>
+        </div>
+
+        <div class="user-field user-field-second" id = "department-show">
+            <%= f.label :Department,id: 'label-dept' %>
+            <%= f.select :department, @departments.map { |d| [d.department_name, d.id] }, { class: 'form-select' } %>
+        </div>
+
+        <div class="reimbu-actions user-actions">
+            <%= f.submit "Submit" %>
+        </div>
+        <% end %>
+    </div>
+</div>
+
+<script>
+$(document).ready(function() {
+    function isValidEmail(email) {
+        var emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+        return emailRegex.test(email);
+    }
+    
+    $('#email').on('blur', function() {
+        var email = $(this).val().trim();
+        
+        if (email === '') {
+            alert('Email is required');
+        } else if (!isValidEmail(email)) {
+            alert('Please enter a valid email address');
+        } else {
+            removeError();
+        }
+    });
+    $('#first_name').on('blur', function() {
+        var name = $(this).val().trim();
+        
+        if (name === '') {
+            alert('First Name is required');
+        } else {
+            removeError();
+        }
+    });
+    $('#last_name').on('blur', function() {
+        var name = $(this).val().trim();
+        
+        if (name === '') {
+            alert('Last Name is required');
+        } else {
+            removeError();
+        }
+    });
+    $('#designation').on('blur', function() {
+        var name = $(this).val().trim();
+        
+        if (name === '') {
+            alert('Designation is required');
+        } else {
+            removeError();
+        }
+    });
+    $('form').on('submit', function(e) {
+        var first_name = $('#first_name').val();
+        var last_name = $('#last_name').val();
+        var designation = $('#designation').val();
+        var email = $('#email').val();
+
+        if (first_name === '' || designation === '' || email === '' || last_name === '') {
+            $('#submit').prop('disabled',true);
+            alert('Please fill all the required fields');
+            return false;
+        } else {
+            $('#submit').prop('disabled',false);
+            return true;
+        }
+    });
+});
+</script>

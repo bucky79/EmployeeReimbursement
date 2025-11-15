@@ -1,0 +1,35 @@
+<div id='menubar'>
+<ul>
+    <li><a href>Users</a></li>
+    <li><a href='/dashboard'>Reimbursements</a></li>
+    <li><a href='/logout'>Logout</a></li>
+<ul>
+</div>
+    <div class="login-form" id="reimbursement-list">
+        <div id='total-submitted-div'>
+            <%= button_to 'create user','/create_user',method: :get %>
+        </div>
+        <table class="reimbursement-table">
+            <tr>
+                <th>Full Name</th>
+                <th>Designation</th>
+                <th>Department</th>
+            </tr>
+            <% @users&.each do |user| %>
+            <tr class="user-row" data-href="<%= user_path(user) %>">
+                <td><%= "#{user.employee.first_name} #{user.employee.last_name}" %></td>
+                <td><%= "#{user.employee.designation}"%></td>
+                <td><%= "#{user.employee&.department&.department_name}"%></td>
+            </tr>
+            <% end %>
+        </table>
+    </div>
+</div>
+
+<script>
+  $(document).ready(function() {
+  $('.user-row').on('click', function() {
+    window.location = $(this).data('href');
+  });
+});
+</script>
